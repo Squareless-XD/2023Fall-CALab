@@ -543,6 +543,14 @@ module mycpu(
 	assign inst_sram_size = 2'd2; // 2 (4 B)
 	assign inst_sram_wstrb = 4'b0; // 0
 	assign inst_sram_wdata = 32'b0; // 0
+
+
+	/*
+	 * NOTE:
+	 * here we can modify bypass type
+	 * for in Fall 2023 term the func/ is wrong: I-$ always disabled
+	 * we cannot test bypass except set bypass as false here
+	 */
 	assign inst_sram_bypass =
 		( csr_crmd_da & ~csr_crmd_pg) && (csr_crmd_datf == 2'b00)
 	 || (~csr_crmd_da &  csr_crmd_pg) && (
@@ -1959,6 +1967,9 @@ endmodule
 			reg_rdata  <= rdata;
 			reg_rlast  <= rlast;
 			reg_rvalid <= rvalid;
+		end
+		else if (r_state == R_DONE) begin
+			reg_rvalid <= 1'b0;
 		end
 	end
 
